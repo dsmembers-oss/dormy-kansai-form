@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>共立メンテナンス 学生寮アンケート</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Hiragino Sans','Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif;background:#f0f0f0;display:flex;justify-content:center}
+.container{width:100%;max-width:440px;background:#fff;min-height:100vh}
+.header{text-align:center;padding:32px 20px 0}
+.logo{font-size:22px;font-weight:800;color:#06C755;letter-spacing:2px}
+.subtitle{font-size:14px;color:#666;margin-top:6px;margin-bottom:16px}
+.header-line{height:3px;background:linear-gradient(90deg,#06C755,#04B34A);border-radius:2px;margin:0 20px}
+.form-body{padding:28px 24px 40px}
+.field{margin-bottom:24px}
+.field.sub{margin-bottom:12px}
+label.field-label{display:block;font-size:15px;font-weight:700;color:#333;margin-bottom:8px}
+label.sub-label{display:block;font-size:13px;font-weight:600;color:#555;margin-bottom:6px}
+.required{color:#E74C3C;font-weight:700;font-size:14px}
+input[type="text"],input[type="tel"],input[type="email"],.select-wrap select{width:100%;padding:14px 16px;font-size:15px;border:1.5px solid #ddd;border-radius:10px;outline:none;background:#FAFAFA;transition:border-color .2s;color:#333;font-family:inherit}
+input:focus,select:focus{border-color:#06C755!important}
+.hint{font-size:12px;color:#999;margin-top:6px;line-height:1.5}
+.btn-group{display:grid;gap:8px}
+.btn-group.cols-4{grid-template-columns:repeat(4,1fr)}
+.btn-group.cols-2{grid-template-columns:repeat(2,1fr)}
+.opt-btn{padding:12px 4px;font-size:13px;font-weight:600;border:1.5px solid #ddd;border-radius:10px;background:#FAFAFA;color:#555;cursor:pointer;transition:all .15s;text-align:center;font-family:inherit}
+.opt-btn:hover{border-color:#aaa}
+.opt-btn.active{border:2px solid #06C755;background:#E8F9EE;color:#06C755;font-weight:700}
+.sub-section{background:#F7FBF7;border-left:3px solid #06C755;border-radius:0 10px 10px 0;padding:16px 16px 8px;margin-bottom:24px;margin-top:-8px}
+.add-btn{display:block;width:100%;padding:10px;font-size:13px;color:#06C755;background:transparent;border:1.5px dashed #06C755;border-radius:8px;cursor:pointer;font-weight:600;margin-bottom:8px;font-family:inherit}
+.add-btn:hover{background:#f0faf3}
+.select-wrap{position:relative}
+.select-wrap select{appearance:none;cursor:pointer;padding-right:36px}
+.select-wrap::after{content:'▼';position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:12px;color:#999;pointer-events:none}
+.submit-btn{width:100%;padding:16px;font-size:17px;font-weight:700;color:#fff;background:linear-gradient(135deg,#06C755,#04A648);border:none;border-radius:12px;cursor:pointer;margin-top:16px;box-shadow:0 4px 14px rgba(6,199,85,.3);transition:opacity .2s;letter-spacing:2px;font-family:inherit}
+.submit-btn:hover{opacity:.85}
+.footer{text-align:center;font-size:11px;color:#bbb;margin-top:24px}
+.hidden{display:none}
+.autocomplete-wrap{position:relative}
+.autocomplete-wrap input{padding-left:40px!important}
+.search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:16px;color:#bbb;pointer-events:none;z-index:1}
+.dropdown{position:absolute;top:100%;left:0;right:0;max-height:200px;overflow-y:auto;background:#fff;border:1.5px solid #06C755;border-radius:10px;margin-top:4px;z-index:100;box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.dropdown-item{padding:12px 16px;font-size:14px;color:#333;cursor:pointer;border-bottom:1px solid #f0f0f0;transition:background .1s}
+.dropdown-item:hover{background:#E8F9EE}
+.dropdown-item .hl{color:#06C755;font-weight:700}
+.dropdown-empty{padding:14px 16px;color:#999;font-size:13px}
+.done-wrap{text-align:center;padding:60px 20px}
+.done-icon{font-size:48px;margin-bottom:16px}
+.done-title{font-size:18px;font-weight:700;color:#333;margin-bottom:8px}
+.done-text{font-size:14px;color:#888;line-height:1.6}
+</style>
+</head>
+<body>
+
+<div class="container" id="app">
+  <div class="header">
+    <div class="logo">共立メンテナンス</div>
+    <div class="subtitle">学生寮に関するアンケート</div>
+    <div class="header-line"></div>
+  </div>
+
+  <div class="form-body" id="formBody">
+
+    <!-- お名前 -->
+    <div class="field">
+      <label class="field-label">お名前 <span class="required">*</span></label>
+      <input type="text" id="name" placeholder="山田 太郎">
+      <div class="hint">※LINEのお名前が自動で入力されます。変更することも可能です。</div>
+    </div>
+
+    <!-- 学年 -->
+    <div class="field">
+      <label class="field-label">現在の学年 <span class="required">*</span></label>
+      <div class="btn-group cols-4" id="gradeGroup">
+        <button class="opt-btn" data-val="1年生">1年生</button>
+        <button class="opt-btn" data-val="2年生">2年生</button>
+        <button class="opt-btn" data-val="3年生">3年生</button>
+        <button class="opt-btn" data-val="高卒生">高卒生</button>
+      </div>
+    </div>
+
+    <!-- 友だち追加経路 -->
+    <div class="field">
+      <label class="field-label">どうやって友だち追加してくれましたか？ <span class="required">*</span></label>
+      <div class="btn-group cols-2" id="sourceGroup">
+        <button class="opt-btn" data-val="見学">見学</button>
+        <button class="opt-btn" data-val="体験入寮">体験入寮</button>
+        <button class="opt-btn" data-val="オープンキャンパス">オープンキャンパス</button>
+        <button class="opt-btn" data-val="Webサイト">Webサイト</button>
+        <button class="opt-btn" data-val="チラシ">チラシ</button>
+        <button class="opt-btn" data-val="その他">その他</button>
+      </div>
+    </div>
+
+    <!-- 見学サブ -->
+    <div class="sub-section hidden" id="subVisit">
+      <div class="field">
+        <label class="field-label">どの会館に見学に行きましたか？ <span class="required">*</span></label>
+        <div class="select-wrap"><select id="visitHall1"><option value="" disabled selected>会館を選択</option></select></div>
+      </div>
+      <button class="add-btn hidden" id="addHall2Btn" onclick="showHall2()">＋ 他にも見学した会館がある場合</button>
+      <div class="field sub hidden" id="hall2Field">
+        <label class="sub-label">2つ目の見学会館</label>
+        <div class="select-wrap"><select id="visitHall2"><option value="" disabled selected>会館を選択（任意）</option></select></div>
+      </div>
+      <button class="add-btn hidden" id="addHall3Btn" onclick="showHall3()">＋ さらに追加</button>
+      <div class="field sub hidden" id="hall3Field">
+        <label class="sub-label">3つ目の見学会館</label>
+        <div class="select-wrap"><select id="visitHall3"><option value="" disabled selected>会館を選択（任意）</option></select></div>
+      </div>
+    </div>
+
+    <!-- 体験入寮サブ -->
+    <div class="sub-section hidden" id="subTrial">
+      <div class="field">
+        <label class="field-label">どの会館に体験入寮しましたか？ <span class="required">*</span></label>
+        <div class="select-wrap"><select id="trialHall"><option value="" disabled selected>会館を選択</option></select></div>
+      </div>
+      <div class="field sub">
+        <label class="sub-label">その他に見学した会館</label>
+        <input type="text" id="otherVisited" placeholder="例：ドーミー江坂（任意）">
+      </div>
+    </div>
+
+    <!-- オープンキャンパスサブ -->
+    <div class="sub-section hidden" id="subOC">
+      <div class="field">
+        <label class="field-label">参加した学校名 <span class="required">*</span></label>
+        <div class="autocomplete-wrap" id="acOC">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="ocSchool" placeholder="学校名を入力" autocomplete="off">
+          <div class="dropdown hidden" id="dropOC"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- その他サブ -->
+    <div class="sub-section hidden" id="subOther">
+      <div class="field">
+        <label class="field-label">詳しく教えてください <span class="required">*</span></label>
+        <input type="text" id="otherSource" placeholder="例：友人の紹介、SNSなど">
+      </div>
+    </div>
+
+    <!-- 志望校 -->
+    <div class="field">
+      <label class="field-label">現時点で希望している学校名 <span class="required">*</span></label>
+      <div class="autocomplete-wrap" id="acSchool">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="schoolName" placeholder="学校名を入力すると候補が表示されます" autocomplete="off">
+        <div class="dropdown hidden" id="dropSchool"></div>
+      </div>
+      <div class="hint">※受験前・合格前でも現時点の希望で大丈夫です。</div>
+    </div>
+
+    <!-- 合格時期 -->
+    <div class="field">
+      <label class="field-label">合格が決まる時期（予定） <span class="required">*</span></label>
+      <div class="select-wrap">
+        <select id="admissionTiming">
+          <option value="" disabled selected>時期を選択</option>
+          <option>4月頃</option><option>5月頃</option><option>6月頃</option><option>7月頃</option>
+          <option>8月頃</option><option>9月頃</option><option>10月頃</option><option>11月頃</option>
+          <option>12月頃</option><option>1月頃</option><option>2月頃</option><option>3月頃</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- 興味ある会館 -->
+    <div class="field">
+      <label class="field-label">興味のある会館</label>
+      <div class="select-wrap"><select id="interestedHall"><option value="" disabled selected>会館を選択（任意）</option></select></div>
+    </div>
+
+    <!-- 電話番号 -->
+    <div class="field">
+      <label class="field-label">電話番号 <span class="required">*</span></label>
+      <input type="tel" id="phone" placeholder="090-1234-5678">
+      <div class="hint">※できれば保護者様の番号をご入力ください。ご本人の番号でも構いません。</div>
+    </div>
+
+    <!-- メールアドレス -->
+    <div class="field">
+      <label class="field-label">メールアドレス <span class="required">*</span></label>
+      <input type="email" id="email" placeholder="example@mail.com">
+    </div>
+
+    <button class="submit-btn" onclick="submitForm()">アンケートを送信</button>
+    <div class="footer">Powered by プリ・テック</div>
+  </div>
+
+  <!-- 完了画面 -->
+  <div class="done-wrap hidden" id="doneScreen">
+    <div class="done-icon">✅</div>
+    <div class="done-title">ご回答ありがとうございました！</div>
+    <div class="done-text">いただいた情報をもとに、あなたに合った<br>寮の情報をお届けします。</div>
+  </div>
+</div>
+
+<script>
+// データ
+var HALLS=["ドーミー江坂コミュニティハウス","ドーミー江坂江の木２","ドーミー江坂豊津","ドーミー江坂","ドーミー東三国","メゾンドクレア茨木","ドーミー茨木春日","ドーミー吹田日の出","ドーミー正雀","ドーミー池田","ドーミー五月ヶ丘","ドーミー南方","ドーミー北梅田","ドーミー大阪天満","ドーミー近大前","ドーミー西長堀","ドーミー西長堀２","ドーミー平野","ドーミー東大阪","ドーミー谷町","ドーミー三国ヶ丘","ドーミー阿倍野","ドーミー上本町","ドーミー王寺","ドーミー西宮門戸","ドーミー武庫川","ドーミー香櫨園","ドーミー芦屋","ドーミー楠が丘","ドーミー今津","ドーミー六甲","ドーミー三宮","ドーミー神戸","KU ROKKO HOUSE","KU ROKKO HOUSE Ⅱ","グローバルハウス仁川","グローバルハウス西宮北口","KU I-House A棟","KU I-House B棟"];
+
+var SCHOOLS=["藍野高等学校","藍野大学","藍野大学短期大学部","明石工業高等専門学校","麻布デンタルアカデミー 大阪校","芦屋大学","飛鳥未来きずな高等学校","飛鳥未来高等学校 大阪キャンパス","アナン学園高等学校","尼崎理容美容専門学校","医学部受験予備校 医進の会","医学部特訓塾 神戸校","医師国家試験予備校メック大阪校","医進予備校 メディック","茨木カレッジ学院","ESPエンタテインメント","ESPギタークラフトアカデミー 大阪","EXPG高等学院 大阪校","ECCアーティスト美容専門学校","ECC高等学院(難波校)","ECC国際外語専門学校","ECCコンピュータ専門学校","ECC予備校梅田校","ECC予備校 天王寺校","WIN STAR 六甲道校","上田安子服飾専門学校","梅田インターナショナルスクール","エイベックス・アーティストアカデミー 大阪","エコーペット高等学院","エコーペットビジネス総合学院","エコール辻 大阪","S高等学校 大阪","NIC大阪校","N高等学校 梅田キャンパス","N高等学校 大阪心斎橋キャンパス","N高等学校 神戸キャンパス","N高等学校 天王寺キャンパス","エール学園","追手門学院高等学校","追手門学院大学","大阪YMCA国際専門学校","大阪ITプログラミング&会計専門学校","大阪青山大学","大阪アニメーションカレッジ専門学校","大阪アニメ・声優&Eスポーツ専門学校","大阪アミューズメントメディア専門学校","大阪医科薬科大学","大阪医歯学院","大阪医専","大阪市立デザイン研究所","大阪医療看護専門学校","大阪医療技術学園専門学校","大阪医療センター附属看護学校","大阪医療秘書福祉&IT専門学校","大阪医療福祉専門学校","大阪ウェディングアンドブライダル専門学校","大阪ウェディング&ホテル・観光専門学校","大阪ECO動物海洋専門学校","大阪大谷大学","大阪音楽大学","大阪河崎リハビリテーション大学","大阪観光大学","大阪外国語・ホテルエアライン専門学校","大阪外語専門学校","大阪学院大学","大阪学院大学高等学校","大阪学院大学短期大学部","大阪キャリナリー製菓調理専門学校","大阪教育大学","大阪教育福祉専門学校","大阪薫英女子短期大学","大阪経済大学","大阪経済法科大学","大阪健康福祉短期大学","大阪健康ほいく専門学校","大阪建設専門学校","大阪芸術大学","大阪芸術大学短期大学部","大阪工業技術専門学校","大阪工業大学","大阪航空専門学校","大阪高等学校","大阪公立大学杉本キャンパス","大阪公立大学 中百舌鳥キャンパス","大阪公立大学 羽曳野キャンパス","大阪公立大学 りんくうキャンパス","大阪国際工科専門職大学","大阪国際大学","大阪国際大学 短期大学部","大阪こども専門学校","大阪コンピュータ専門学校","大阪産業大学","大阪歯科衛生学院専門学校","大阪歯科衛生士専門学校","大阪歯科学院専門学校","大阪社体スポーツ専門学校","大阪樟蔭女子大学 小阪キャンパス","大阪商業大学","大阪商業大学高等学校","大阪情報ITクリエイター専門学校","大阪情報コンピュータ専門学校","大阪情報専門学校","大阪女学院大学","大阪スクールオブミュージック専門学校","大阪成蹊大学","大阪聖徳学園社会体育専門学校","大阪総合デザイン専門学校","大阪総合福祉専門学校","大阪総合保育大学","大阪体育大学","大阪大学","大阪大学 大学院","大阪大学歯学部附属歯科技工士学校","大阪ダンス・俳優&舞台芸術専門学校","大阪調理製菓専門学校","大阪千代田短期大学","大阪鉄道・観光専門学校","大阪テーマパーク・ダンス専門学校","大阪デザイナー・アカデミー","OCA大阪デザイン&テクノロジー専門学校","大阪電子専門学校","大阪常磐会大学","大阪動植物海洋専門学校","大阪人間科学大学","大阪ハイテクノロジー専門学校","大阪バイオメディカル専門学校","大阪ビジネス・アカデミー","大阪ビジュアルアーツ・アカデミー","大阪美術専門学校","大阪ビューティーアート専門学校","大阪美容専門学校","大阪ファッションアート専門学校","大阪府歯科医師会附属歯科衛生士専門学校","大阪物療大学","大阪ブライダル専門学校","大阪文化服装学院","大阪ベルェベルビューティ&ブライダル専門学校","大阪ベルェベル美容専門学校","大阪ぺピイ動物看護専門学校","大阪保育こども教育専門学校","大阪保健医療大学","大阪保健福祉専門学校","大阪ホスピタリティ・アカデミー","大阪ホテル・観光&ウェディング専門学校","大阪モード学園","大阪夕陽丘学園高等学校","大阪夕陽丘学園短期大学","大阪行岡医療大学","大阪行岡医療専門学校 長柄校","大阪リゾート&スポーツ専門学校","大阪リハビリテーション専門学校","大阪YWCA専門学校","大手前大学","大原医療福祉製菓専門学校 梅田校","大原外語観光&ブライダルビューティー専門学校","大原歯科衛生学院専門学校","大原情報ITクリエイター専門学校","大原スポーツ&メディカルヘルス専門学校 難波校","大原保育こども教育専門学校","大原法律公務員&スポーツ専門学校 大阪校","大原簿記専門学校 大阪校","大原簿記法律専門学校 難波校","大原簿記法律専門学校 梅田校","大原簿記専門学校 神戸校","海技大学校","香ヶ丘リベルテ高等学校","KADOKAWAアニメ・声優アカデミー","KADOKAWAドワンゴ情報工科学院","KADOKAWAマンガアカデミー","河合塾 神戸三宮校","河合塾 上本町校","河合塾 大阪校","河合塾 天王寺校","関西医科専門学校","関西医科大学","関西医療学園専門学校","関西医療大学","関西インターナショナルハイスクール","関西外国語大学","関西外語専門学校","関西健康科学専門学校","関西国際大学","関西国際旅行・ホテル専門学校","関西女子短期大学","関西大学","関西大学北陽高校","関西テレビ電気専門学校","関西ビューティプロ専門学校","関西美容専門学校","関西福祉科学大学","関西保育福祉専門学校","関西学院高等部","関西学院千里国際高等部","関西学院大学","関メディベースボール学院","畿央大学","北大阪福祉専門学校","キャットミュージックカレッジ専門学校","近畿医療専門学校","近畿コンピュータ電子専門学校","近畿測量専門学校","近畿大学","近畿大学附属看護専門学校","近畿リハビリテーション学院","グラムール美容専門学校","クラーク記念国際高等学校 神戸三宮キャンパス","クラーク記念国際高等学校 天王寺キャンパス","啓明学院中学校・高等学校","研伸館 阪急豊中校","研伸館プライベートスクール 上本町校","小出美容専門学校","甲子園大学","高津理容美容専門学校","甲南女子大学","甲南大学","神戸YMCA学院専門学校","神戸医人館","神戸医療福祉専門学校","神戸医療未来大学","神戸医療未来大学(大阪天王寺キャンパス)","神戸看護受験セミナー","神戸看護専門学校","神戸学院大学","神戸教育短期大学","神戸芸術工科大学","神戸高等学校","神戸・甲陽音楽&ダンス専門学校","神戸・甲陽音楽ダンス&アート高等専修学校","神戸弘陵学園高等学校","神戸国際大学","神戸国際大学附属高校","神戸国際調理製菓専門学校","神戸市医師会専門学校","神戸市看護大学","神戸市外国語大学","神戸松蔭大学","神戸市立工業高等専門学校","神戸進学会","神戸親和大学","神戸情報大学院大学","神戸女学院大学","神戸女子大学","神戸製菓専門学校","神戸セミナー","神戸総合医療専門学校","神戸大学","神戸大学附属中等教育学校","神戸電子専門学校","神戸東洋医療学院","神戸常盤大学","神戸動植物環境専門学校","神戸ビジネスアカデミー","神戸ファッション専門学校","神戸ブレーメン動物専門学校","神戸ベルェベル美容専門学校","神戸元町医療秘書専門学校","神戸元町こども専門学校","神戸薬科大学","神戸リハビリテーション福祉専門学校","神戸龍谷高等学校","神戸理容美容専門学校","神戸・甲陽デザイン&テクノロジー専門学校","甲陽学院高等学校","向陽台高等学校 大阪","国際ファッション専門職大学 大阪キャンパス","堺女子短期大学","桜宮高校","産業技術短期大学","四條畷学園大学短期大学","四條畷学園大学","四天王寺高等学校","四天王寺大学","修成建設専門学校","夙川学院短期大学","頌栄短期大学","新大阪歯科衛生士専門学校","新大阪歯科技工士専門学校","進学塾ビッグバン大阪梅田校","神港学園神港高校","J国際学院","滋慶医療科学大学","滋慶医療科学大学大学院","獣医専門予備校VET","駿台梅田校","駿台観光&外語ビジネスカレッジ大阪","駿台I高等学院","駿台予備学校 上本町校","駿台予備学校 大阪校","駿台予備学校 大阪南校","駿台予備学校 神戸校","清恵会医療専門学院","清恵会第二医療専門学院","清光編入学院","摂南大学","専門学校アートカレッジ神戸","千里金蘭大学","全伸医学予備校","相愛大学","創造社デザイン専門学校","園田学園女子大学","太成学院大学","太成学院大学歯科衛生専門学校","高槻高等学校","宝塚医療大学","宝塚大学","滝川高等学校","武田塾 大阪校","武田塾 神戸三宮校","TAC 梅田校","ダンスオブハーツ養成学校","中央工学校OSAKA","中小企業大学校関西校","辻学園 栄養専門学校","辻学園 調理製菓専門学校","辻製菓専門学校","辻調理師専門学校","テアトルアカデミー大阪校","帝塚山学院大学","帝塚山大学","天王寺学館高等学校","天王寺予備校","天理医療大学","天理大学","デジタルハリウッド 大阪校","東亜経理専門学校","東京アカデミー大阪校","東進予備校 奈良校","東洋医療専門学校","東洋食品工業短期大学","常盤会短期大学","トフルゼミナール","ドクターズセミナー","ナカサカ医進ゼミナール","中の島美術学院","灘高等学校","浪速高等学校","なにわ歯科衛生専門学校","奈良学園大学","奈良きもの芸術専門学校","奈良教育大学","奈良県立医科大学","奈良県立大学","奈良佐保短期大学","奈良先端科学技術大学院大学","奈良総合ビジネス専門学校","奈良大学","奈良リハビリテーション専門学校","南海福祉専門学校","西沢学園","西日本ヘアメイクカレッジ","西宮高等学校","西大和学園中学校","西大和学園高等学校","日米英語学院 三宮校","日本医歯薬研修協会大阪教室","日本医療学院専門学校","日本医療秘書専門学校","日本カジノスクール大阪校","日本経済大学 神戸三宮キャンパス","日本高等美容専門学校","日本コンピュータ専門学校","日本歯科学院専門学校","日本写真映像専門学校 大阪","日本自動車ビジネス専門学校","日本分析化学専門学校","日本メイクアップアーチスト学院","日本メイク","日本メディカル福祉専門学校","日本モータースポーツ専門学校 大阪校","日本理工情報専門学校","日本リフレクソロジスト養成学院","NRB日本理容美容専門学校","ハイテックスクール","羽衣国際大学","初芝立命館高等学校","HAL大阪","阪神自動車航空鉄道専門学校","阪南大学","阪南大学高等学校","阪和鳳自動車工業専門学校","ハーベスト医療福祉専門学校","梅花女子大学","バンタンクリエイターアカデミー専門部 大阪校","バンタンゲームアカデミー 大阪","バンタンテックフォードアカデミー大阪校","バンタンデザイン研究所 大阪","東大阪大学","東大阪大学柏原高校","ヒコ・みづのジュエリーカレッジ大阪","姫路大学","姫路獨協大学","ヒューマンアカデミー 大阪校","ヒューマンアカデミー神戸校","兵庫医科大学","兵庫医療大学","兵庫教育大学","兵庫教育大学大学院","兵庫県歯科医師会附属兵庫歯科衛生士学院","兵庫県立総合衛生学院","兵庫県立大学","兵庫大学","ファーマプロダクト大阪校","平成医療学園専門学校","平成リハビリテーション専門学校","放送芸術学院専門学校","報徳学園高等学校","北斗会看護専門学校","ホンダテクニカルカレッジ関西","増田塾 大阪校","増田塾 神戸校","増田塾 難波校","マナビズム上本町校","マロニエファッションデザイン専門学校","ミキヤ ヘアメイクカレッジ","ミスパリエステティック専門学校","湊川短期大学","箕面学園福祉保育専門学校","箕面自由学園高等学校","ミリカ医専・ミリカ予備校","武庫川女子大学","メイクボックス ヘアアンドメイク総合学院","明治東洋医学院専門学校","メディアップ上本町校","メディカルラボ 大阪梅田校","メディカルラボ神戸校","メディセレスクール大阪校","メディセレスクール神戸校","メディック名門会大阪本部校","メディック名門会神戸校","森ノ宮医療学園専門学校","森ノ宮医療大学","薬学ゼミナール大阪教室","薬学ゼミナール神戸校","薬剤師国家試験予備校REC","大和大学","大和大学白鳳短期大学部","行岡医学技術専門学校","四谷学院 梅田校","四谷学院 神戸校","四谷学院 難波校","代々木アニメーション学院大阪校","代々木ゼミナール大阪校","代々木ゼミナール大阪南校","代々木ゼミナール神戸校","履正社国際医療スポーツ専門学校","立命館大学 大阪いばらきキャンパス","流通科学大学","ル・トーア東亜美容専門学校","ルネサンス大阪高校","レコールバンタン大阪校","ロイヤルグルーミング学院","WAO高等学校","ヴィーナスアカデミー","ヴェールルージュ美容専門学校","桃山学院大学","桃山学院教育大学","創学ゼミナール 学園都市校","夕陽丘予備校"];
+SCHOOLS.sort(function(a,b){return a.localeCompare(b,'ja')});
+
+// 会館セレクト初期化
+function fillHallSelect(sel){
+  HALLS.forEach(function(h){var o=document.createElement('option');o.value=h;o.textContent=h;sel.appendChild(o)});
+}
+['visitHall1','visitHall2','visitHall3','trialHall','interestedHall'].forEach(function(id){fillHallSelect(document.getElementById(id))});
+
+// ボタングループ
+function setupBtnGroup(groupId,cb){
+  var btns=document.getElementById(groupId).querySelectorAll('.opt-btn');
+  btns.forEach(function(btn){
+    btn.addEventListener('click',function(){
+      btns.forEach(function(b){b.classList.remove('active')});
+      btn.classList.add('active');
+      if(cb)cb(btn.getAttribute('data-val'));
+    });
+  });
+}
+setupBtnGroup('gradeGroup');
+setupBtnGroup('sourceGroup',function(val){
+  document.getElementById('subVisit').classList.add('hidden');
+  document.getElementById('subTrial').classList.add('hidden');
+  document.getElementById('subOC').classList.add('hidden');
+  document.getElementById('subOther').classList.add('hidden');
+  document.getElementById('addHall2Btn').classList.add('hidden');
+  document.getElementById('addHall3Btn').classList.add('hidden');
+  document.getElementById('hall2Field').classList.add('hidden');
+  document.getElementById('hall3Field').classList.add('hidden');
+  if(val==='見学'){document.getElementById('subVisit').classList.remove('hidden')}
+  else if(val==='体験入寮'){document.getElementById('subTrial').classList.remove('hidden')}
+  else if(val==='オープンキャンパス'){document.getElementById('subOC').classList.remove('hidden')}
+  else if(val==='その他'){document.getElementById('subOther').classList.remove('hidden')}
+});
+
+// 見学の追加ボタン
+document.getElementById('visitHall1').addEventListener('change',function(){
+  if(this.value)document.getElementById('addHall2Btn').classList.remove('hidden');
+});
+function showHall2(){
+  document.getElementById('hall2Field').classList.remove('hidden');
+  document.getElementById('addHall2Btn').classList.add('hidden');
+}
+document.getElementById('visitHall2').addEventListener('change',function(){
+  if(this.value)document.getElementById('addHall3Btn').classList.remove('hidden');
+});
+function showHall3(){
+  document.getElementById('hall3Field').classList.remove('hidden');
+  document.getElementById('addHall3Btn').classList.add('hidden');
+}
+
+// オートコンプリート
+function setupAutocomplete(inputId,dropId){
+  var input=document.getElementById(inputId);
+  var drop=document.getElementById(dropId);
+  input.addEventListener('input',function(){
+    var q=this.value.toLowerCase();
+    if(!q){drop.classList.add('hidden');return}
+    var matches=SCHOOLS.filter(function(s){return s.toLowerCase().indexOf(q)!==-1}).slice(0,20);
+    drop.innerHTML='';
+    if(matches.length===0){
+      drop.innerHTML='<div class="dropdown-empty">該当する学校が見つかりません。直接入力してください。</div>';
+    }else{
+      matches.forEach(function(s){
+        var div=document.createElement('div');
+        div.className='dropdown-item';
+        var idx=s.toLowerCase().indexOf(q);
+        div.innerHTML=escHtml(s.slice(0,idx))+'<span class="hl">'+escHtml(s.slice(idx,idx+q.length))+'</span>'+escHtml(s.slice(idx+q.length));
+        div.addEventListener('click',function(){input.value=s;drop.classList.add('hidden')});
+        drop.appendChild(div);
+      });
+    }
+    drop.classList.remove('hidden');
+  });
+  input.addEventListener('focus',function(){if(this.value)this.dispatchEvent(new Event('input'))});
+  document.addEventListener('click',function(e){
+    if(!e.target.closest('#'+inputId) && !e.target.closest('#'+dropId)){drop.classList.add('hidden')}
+  });
+}
+function escHtml(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
+setupAutocomplete('ocSchool','dropOC');
+setupAutocomplete('schoolName','dropSchool');
+
+// 送信
+function submitForm(){
+  document.getElementById('formBody').classList.add('hidden');
+  document.getElementById('doneScreen').classList.remove('hidden');
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>
