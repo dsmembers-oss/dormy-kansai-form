@@ -23,6 +23,7 @@ input:focus,select:focus{border-color:#06C755!important}
 .hint{font-size:12px;color:#999;margin-top:6px;line-height:1.5}
 .btn-group{display:grid;gap:8px}
 .btn-group.cols-4{grid-template-columns:repeat(4,1fr)}
+.btn-group.cols-3{grid-template-columns:repeat(3,1fr)}
 .btn-group.cols-2{grid-template-columns:repeat(2,1fr)}
 .opt-btn{padding:12px 4px;font-size:13px;font-weight:600;border:1.5px solid #ddd;border-radius:10px;background:#FAFAFA;color:#555;cursor:pointer;transition:all .15s;text-align:center;font-family:inherit}
 .opt-btn:hover{border-color:#aaa}
@@ -69,14 +70,30 @@ input:focus,select:focus{border-color:#06C755!important}
       <div class="hint">※LINEのお名前が自動で入力されます。変更することも可能です。</div>
     </div>
 
+    <!-- フリガナ -->
+    <div class="field">
+      <label class="field-label">フリガナ <span class="required">*</span></label>
+      <input type="text" id="nameKana" placeholder="ヤマダ タロウ">
+    </div>
+
+    <!-- 性別 -->
+    <div class="field">
+      <label class="field-label">性別 <span class="required">*</span></label>
+      <div class="btn-group cols-2" id="genderGroup">
+        <button class="opt-btn" data-val="男性">男性</button>
+        <button class="opt-btn" data-val="女性">女性</button>
+      </div>
+    </div>
+
     <!-- 学年 -->
     <div class="field">
       <label class="field-label">現在の学年 <span class="required">*</span></label>
-      <div class="btn-group cols-4" id="gradeGroup">
+      <div class="btn-group cols-3" id="gradeGroup">
         <button class="opt-btn" data-val="1年生">1年生</button>
         <button class="opt-btn" data-val="2年生">2年生</button>
         <button class="opt-btn" data-val="3年生">3年生</button>
-        <button class="opt-btn" data-val="高卒生">高卒生</button>
+        <button class="opt-btn" data-val="既卒">既卒</button>
+        <button class="opt-btn" data-val="その他">その他</button>
       </div>
     </div>
 
@@ -84,11 +101,10 @@ input:focus,select:focus{border-color:#06C755!important}
     <div class="field">
       <label class="field-label">どうやって友だち追加してくれましたか？ <span class="required">*</span></label>
       <div class="btn-group cols-2" id="sourceGroup">
-        <button class="opt-btn" data-val="見学">見学</button>
+        <button class="opt-btn" data-val="寮見学">寮見学</button>
         <button class="opt-btn" data-val="体験入寮">体験入寮</button>
         <button class="opt-btn" data-val="オープンキャンパス">オープンキャンパス</button>
-        <button class="opt-btn" data-val="Webサイト">Webサイト</button>
-        <button class="opt-btn" data-val="チラシ">チラシ</button>
+        <button class="opt-btn" data-val="住まい相談ブース">住まい相談ブース</button>
         <button class="opt-btn" data-val="その他">その他</button>
       </div>
     </div>
@@ -154,16 +170,22 @@ input:focus,select:focus{border-color:#06C755!important}
       <div class="hint">※受験前・合格前でも現時点の希望で大丈夫です。</div>
     </div>
 
-    <!-- 合格時期 -->
+    <!-- 学科・コース -->
     <div class="field">
-      <label class="field-label">合格が決まる時期（予定） <span class="required">*</span></label>
-      <div class="select-wrap">
-        <select id="admissionTiming">
-          <option value="" disabled selected>時期を選択</option>
-          <option>4月頃</option><option>5月頃</option><option>6月頃</option><option>7月頃</option>
-          <option>8月頃</option><option>9月頃</option><option>10月頃</option><option>11月頃</option>
-          <option>12月頃</option><option>1月頃</option><option>2月頃</option><option>3月頃</option>
-        </select>
+      <label class="field-label">学科・コース</label>
+      <input type="text" id="department" placeholder="例：看護学科">
+    </div>
+
+    <!-- 受験方法 -->
+    <div class="field">
+      <label class="field-label">予定している受験方法 <span class="required">*</span></label>
+      <div class="btn-group cols-2" id="examMethodGroup">
+        <button class="opt-btn" data-val="AO入試">AO入試</button>
+        <button class="opt-btn" data-val="推薦入試">推薦入試</button>
+        <button class="opt-btn" data-val="公募制推薦入試">公募制推薦入試</button>
+        <button class="opt-btn" data-val="一般入試">一般入試</button>
+        <button class="opt-btn" data-val="その他">その他</button>
+        <button class="opt-btn" data-val="未定">未定</button>
       </div>
     </div>
 
@@ -184,6 +206,12 @@ input:focus,select:focus{border-color:#06C755!important}
     <div class="field">
       <label class="field-label">メールアドレス <span class="required">*</span></label>
       <input type="email" id="email" placeholder="example@mail.com">
+    </div>
+
+    <!-- 住所 -->
+    <div class="field">
+      <label class="field-label">住所（建物名も含む） <span class="required">*</span></label>
+      <input type="text" id="address" placeholder="例：大阪府吹田市江坂町1-2-3 ○○マンション101号室">
     </div>
 
     <button class="submit-btn" onclick="submitForm()">アンケートを送信</button>
@@ -223,6 +251,8 @@ function setupBtnGroup(groupId,cb){
   });
 }
 setupBtnGroup('gradeGroup');
+setupBtnGroup('genderGroup');
+setupBtnGroup('examMethodGroup');
 setupBtnGroup('sourceGroup',function(val){
   document.getElementById('subVisit').classList.add('hidden');
   document.getElementById('subTrial').classList.add('hidden');
@@ -232,7 +262,7 @@ setupBtnGroup('sourceGroup',function(val){
   document.getElementById('addHall3Btn').classList.add('hidden');
   document.getElementById('hall2Field').classList.add('hidden');
   document.getElementById('hall3Field').classList.add('hidden');
-  if(val==='見学'){document.getElementById('subVisit').classList.remove('hidden')}
+  if(val==='寮見学'){document.getElementById('subVisit').classList.remove('hidden')}
   else if(val==='体験入寮'){document.getElementById('subTrial').classList.remove('hidden')}
   else if(val==='オープンキャンパス'){document.getElementById('subOC').classList.remove('hidden')}
   else if(val==='その他'){document.getElementById('subOther').classList.remove('hidden')}
